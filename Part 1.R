@@ -40,6 +40,8 @@ group1 <- group1 %>% rbind.fill() %>% as.tibble %>%
   mutate(hh = NULL) %>%  
   mutate(ATMP = replace(ATMP, ATMP == 999, NA)) %>% 
   mutate(WTMP = replace(WTMP, WTMP == 999, NA)) %>% 
+  mutate(ATMP = replace(ATMP, ATMP == 99, NA)) %>% 
+  mutate(WTMP = replace(WTMP, WTMP == 99, NA)) %>% 
   unite(Date,YYYY,MM,DD,sep = "-")
 
 
@@ -49,6 +51,8 @@ group2 <- group2 %>% rbind.fill() %>% as.tibble %>%
   mutate(hh = NULL) %>% 
   mutate(ATMP = replace(ATMP, ATMP == 999, NA)) %>% 
   mutate(WTMP = replace(WTMP, WTMP == 999, NA)) %>% 
+  mutate(ATMP = replace(ATMP, ATMP == 99, NA)) %>% 
+  mutate(WTMP = replace(WTMP, WTMP == 99, NA)) %>% 
   unite(Date,YYYY,MM,DD,sep="-")
 
 
@@ -59,6 +63,8 @@ group3 <- group3 %>% rbind.fill() %>% as.tibble %>%
   unite(Date,YYYY,MM,DD,sep="-") %>% 
   mutate(YY = NULL, hh = NULL, mm = NULL) %>% 
   mutate(ATMP = replace(ATMP, ATMP == 999, NA)) %>% 
-  mutate(WTMP = replace(WTMP, WTMP == 999, NA))
+  mutate(WTMP = replace(WTMP, WTMP == 999, NA)) %>% 
+  mutate(ATMP = replace(ATMP, ATMP == 99, NA)) %>% 
+  mutate(WTMP = replace(WTMP, WTMP == 99, NA))
 
 tidy <- bind_rows(group1,group2,group3) # use this to plot
