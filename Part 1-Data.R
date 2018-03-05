@@ -134,3 +134,8 @@ bouy.tidy <- bouy %>%
 # convert columns into numeric values
 bouy.tidy$ATMP <- as.numeric(bouy.tidy$ATMP)
 bouy.tidy$WTMP <- as.numeric(bouy.tidy$WTMP)
+
+# save workspace as RData file
+save.image(file="data_workspace.RData")
+# load workspace from RData file
+load("data_workspace.RData")
