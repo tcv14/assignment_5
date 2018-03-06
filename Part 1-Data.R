@@ -109,6 +109,8 @@ bouy.tidy <- bouy %>%
   mutate(MWD=replace(MWD,MWD=="999",NA)) %>%
   mutate(ATMP=replace(ATMP,ATMP=="999.0",NA)) %>%
   mutate(ATMP=replace(ATMP,ATMP=="999",NA)) %>%
+  mutate(ATMP=replace(ATMP,ATMP=="99",NA)) %>%
+  mutate(ATMP=replace(ATMP,ATMP=="99.0",NA)) %>%
   mutate(WTMP=replace(WTMP,WTMP=="99.0",NA)) %>%
   mutate(WTMP=replace(WTMP,WTMP=="999.0",NA)) %>%
   mutate(WTMP=replace(WTMP,WTMP=="999",NA)) %>%
