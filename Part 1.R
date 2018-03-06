@@ -68,3 +68,8 @@ group3 <- group3 %>% rbind.fill() %>% as.tibble %>%
   mutate(WTMP = replace(WTMP, WTMP == 99, NA))
 
 tidy <- bind_rows(group1,group2,group3) # use this to plot
+
+# save workspace as RData file
+save.image(file="part1_data_workspace.RData")
+# load workspace from RData file
+load("part1_data_workspace.RData")
