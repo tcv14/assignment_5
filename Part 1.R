@@ -67,9 +67,16 @@ group3 <- group3 %>% rbind.fill() %>% as.tibble %>%
   mutate(ATMP = replace(ATMP, ATMP == 99, NA)) %>% 
   mutate(WTMP = replace(WTMP, WTMP == 99, NA))
 
-tidy <- bind_rows(group1,group2,group3) # use this to plot
+tidy <- bind_rows(group1,group2,group3)
+tidy$Date <- as.Date(tidy$Date)   # use this to plot
 
 # save workspace as RData file
-save.image(file="part1_data_workspace.RData")
-# load workspace from RData file
-load("part1_data_workspace.RData")
+save.image(file="./Data/part1_tidydata.RData")
+
+ggplot(tidy,aes(Date, ATMP)) + geom_line() +
+  ylab('Air Temperature') + scale_x_date(date_breaks = '1 year',date_labels = '%b %y') +
+  theme(axis.text.x=element_text(angle=90, hjust=1))
+
+ggplot(tidy,aes(Date, WTMP)) + geom_line() +
+  ylab('Sea Temperature') + scale_x_date(date_breaks = '1 year',date_labels = '%b %y') +
+  theme(axis.text.x=element_text(angle=90, hjust=1))
