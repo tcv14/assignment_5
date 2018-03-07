@@ -73,6 +73,8 @@ tidy$Date <- as.Date(tidy$Date)   # use this to plot
 # save workspace as RData file
 save.image(file="./Data/part1_tidydata.RData")
 
+load("./Data/part1_tidydata.RData")
+
 ggplot(tidy,aes(Date, ATMP)) + geom_line() +
   ylab('Air Temperature') + scale_x_date(date_breaks = '1 year',date_labels = '%b %y') +
   theme(axis.text.x=element_text(angle=90, hjust=1))
@@ -80,3 +82,11 @@ ggplot(tidy,aes(Date, ATMP)) + geom_line() +
 ggplot(tidy,aes(Date, WTMP)) + geom_line() +
   ylab('Sea Temperature') + scale_x_date(date_breaks = '1 year',date_labels = '%b %y') +
   theme(axis.text.x=element_text(angle=90, hjust=1))
+
+ggplot(tidy, aes(Date)) + 
+  geom_line(aes(y = ATMP, color = "Air Temperature")) + 
+  geom_line(aes(y = WTMP, color = "Sea Temperature")) +
+  ylab('Temperature') + scale_x_date(date_breaks = '1 year',date_labels = '%b %y') +
+  theme(axis.text.x=element_text(angle=90, hjust=1))
+
+cor(tidy$ATMP,tidy$WTMP,use = 'complete.obs')
