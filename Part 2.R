@@ -11,6 +11,7 @@ veg.1 <- veg %>%
                 Data = `Data Item`, Category = `Domain Category`) %>%
   separate(Category, into = c("Label", "Type"), sep=",")
 
+# tidy restricted use chemicals
 veg.chem <- veg.1 %>%
   filter(Label=="RESTRICTED USE CHEMICAL") %>%
   separate(Data, into=c("A","Class Desc"),sep=" - ") %>%
