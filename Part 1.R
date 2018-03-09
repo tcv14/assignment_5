@@ -90,3 +90,6 @@ ggplot(tidy, aes(Date)) +
   theme(axis.text.x=element_text(angle=90, hjust=1))
 
 cor(tidy$ATMP,tidy$WTMP,use = 'complete.obs')
+
+tidy.shiny <- tidy %>%
+  separate(Date, into=c("Year","Month","Day"),sep='-')
