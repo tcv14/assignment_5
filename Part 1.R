@@ -94,7 +94,9 @@ plot.mixed <- ggplot(tidy, aes(Date)) +
 corr <- cor(tidy$ATMP,tidy$WTMP,use = 'complete.obs')
 
 tidy.shiny <- tidy %>%
-  separate(Date, into=c("Year","Month","Day"),sep='-')
+  separate(Date, into=c("Year","Month","Day"),sep='-') %>%
+  mutate(Date=str_c(Year,Month,Day,sep="-"))
+tidy.shiny$Date <- as.Date(tidy.shiny$Date)
 
 # Others: tests
 

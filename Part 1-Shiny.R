@@ -1,8 +1,9 @@
 # load required package
+library(shiny)
 library(shinydashboard)
 
 ui <- dashboardPage(
-  dashboardHeader(title = "Basic dashboard"),
+  dashboardHeader(title = "Bouy 46035"),
   dashboardSidebar(
     sidebarMenu(
       menuItem("ATMP", tabName = "ATMP", icon = icon("dashboard")),
@@ -14,13 +15,13 @@ ui <- dashboardPage(
     tabItems(
       # First tab content
       tabItem(tabName = "ATMP",
-              h2("Time Series of ATMP"),
+              h2("Time Series Plot of Air Temperature"),
               fluidRow(
                 box(plotOutput("plot1", height = 250)),
                 
                 box(
-                  title = "Time Frame",
-                  sliderInput("slider", "Year:", min = 1985, max = 2017,
+                  title = "Select Time Frame",
+                  sliderInput("slider1", "Year:", min = 1985, max = 2017,
                               value = c(1995,2000))
                 )
               )
@@ -28,13 +29,13 @@ ui <- dashboardPage(
       
       # Second tab content
       tabItem(tabName = "WTMP",
-              h2("Time Series of WTMP"),
+              h2("Time Series Plot of Sea Temperature"),
               fluidRow(
                 box(plotOutput("plot2", height = 250)),
                 
                 box(
-                  title = "Time Frame",
-                  sliderInput("slider", "Year:", min = 1985, max = 2017,
+                  title = "Select Time Frame",
+                  sliderInput("slider2", "Year:", min = 1985, max = 2017,
                               value = c(1995,2000))
                 )
               )
@@ -44,18 +45,28 @@ ui <- dashboardPage(
 )
 
 server <- function(input, output) {
-  source("Part 1.R")
+  source("Part 1.R",local=TRUE)
   
   output$plot1 <- renderPlot({
-    year.selected <- tidy.shiny$Year[seq_len(input$slider)]
-    ggplot(tidy.shiny,aes(year.selected, ATMP)) + geom_line() +
+    selected1 <- tidy.shiny$Year==min(input$slider1):max(input$slider1)
+    year.selected1 <- tidy.shiny$Year[which(selected1)]
+    ATMP.selected <- tidy.shiny$ATMP[which(selected1)]
+    tidy.ATMP <- dplyr::bind_cols(data.frame(year.selected1),data.frame(ATMP.selected),
+                                  data.frame(tidy.shiny$Date[which(selected1)])) %>%
+      dplyr::rename(Date=`tidy.shiny.Date.which.selected1..`)
+    ggplot(tidy.ATMP,aes(Date, ATMP.selected)) + geom_line() +
       ylab('Air Temperature') + scale_x_date(date_breaks = '1 year',date_labels = '%b %y') +
       theme(axis.text.x=element_text(angle=90, hjust=1))
   })
   
-  output$plot1 <- renderPlot({
-    year.selected <- tidy.shiny$Year[seq_len(input$slider)]
-    ggplot(tidy,aes(year.selected, WTMP)) + geom_line() +
+  output$plot2 <- renderPlot({
+    selected2 <- tidy.shiny$Year==min(input$slider2):max(input$slider2)
+    year.selected2 <- tidy.shiny$Year[which(selected2)]
+    WTMP.selected <- tidy.shiny$WTMP[which(selected2)]
+    tidy.WTMP <- dplyr::bind_cols(data.frame(year.selected2),data.frame(WTMP.selected),
+                                  data.frame(tidy.shiny$Date[which(selected2)])) %>%
+      dplyr::rename(Date=`tidy.shiny.Date.which.selected2..`)
+    ggplot(tidy.WTMP,aes(Date, WTMP.selected)) + geom_line() +
       ylab('Sea Temperature') + scale_x_date(date_breaks = '1 year',date_labels = '%b %y') +
       theme(axis.text.x=element_text(angle=90, hjust=1))
   })
