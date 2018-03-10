@@ -1,6 +1,7 @@
 # load required packages
 library(plyr)
 library(tidyverse)
+library(car)
 
 # download and save data
 
@@ -68,28 +69,49 @@ group3 <- group3 %>% rbind.fill() %>% as.tibble %>%
   mutate(WTMP = replace(WTMP, WTMP == 99, NA))
 
 tidy <- bind_rows(group1,group2,group3)
+
 tidy$Date <- as.Date(tidy$Date)   # use this to plot
 
 # save workspace as RData file
 save.image(file="./Data/part1_tidydata.RData")
 
-load("./Data/part1_tidydata.RData")
+# directly load this file if needed
+# load("./Data/part1_tidydata.RData") 
 
-ggplot(tidy,aes(Date, ATMP)) + geom_line() +
+plot.ATMP <- ggplot(tidy,aes(Date, ATMP)) + geom_line() +
   ylab('Air Temperature') + scale_x_date(date_breaks = '1 year',date_labels = '%b %y') +
-  theme(axis.text.x=element_text(angle=90, hjust=1))
+  theme(axis.text.x=element_text(angle=65, hjust=1))
 
-ggplot(tidy,aes(Date, WTMP)) + geom_line() +
+plot.WTMP <- ggplot(tidy,aes(Date, WTMP)) + geom_line() +
   ylab('Sea Temperature') + scale_x_date(date_breaks = '1 year',date_labels = '%b %y') +
-  theme(axis.text.x=element_text(angle=90, hjust=1))
+  theme(axis.text.x=element_text(angle=65, hjust=1))
 
-ggplot(tidy, aes(Date)) + 
+plot.mixed <- ggplot(tidy, aes(Date)) + 
   geom_line(aes(y = ATMP, color = "Air Temperature")) + 
   geom_line(aes(y = WTMP, color = "Sea Temperature")) +
   ylab('Temperature') + scale_x_date(date_breaks = '1 year',date_labels = '%b %y') +
-  theme(axis.text.x=element_text(angle=90, hjust=1))
+  theme(axis.text.x=element_text(angle=65, hjust=1))
 
-cor(tidy$ATMP,tidy$WTMP,use = 'complete.obs')
+corr <- cor(tidy$ATMP,tidy$WTMP,use = 'complete.obs')
 
 tidy.shiny <- tidy %>%
   separate(Date, into=c("Year","Month","Day"),sep='-')
+
+# Others: tests
+
+# has the mean temperature changed for past 30 years?
+# use one way ANOVA test to see if means have changed for air and sea temperatures (no restrictions on equal variance)
+
+tidy$Year <- as.factor(format(as.Date(tidy$Date),"%Y"))
+
+oneway.test(ATMP ~ Year, data = tidy) # significant change in air temperature
+oneway.test(WTMP ~ Year, data = tidy) # significant change in sea temperature
+
+
+m.air <- tidy2 %>% group_by(Year) %>% summarize(m.air = mean(ATMP, na.rm = TRUE)) 
+m.sea <- tidy2 %>% group_by(Year) %>% summarize(m.sea = mean(WTMP, na.rm = TRUE))
+
+var.air <- tidy2 %>% group_by(Date) %>% summarize(var.air = var(ATMP, na.rm = TRUE))
+var.sea <- tidy2 %>% group_by(Date) %>% summarize(var.sea = var(WTMP, na.rm = TRUE))
+
+

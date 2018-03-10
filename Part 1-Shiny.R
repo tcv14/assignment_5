@@ -20,7 +20,7 @@ ui <- dashboardPage(
                 
                 box(
                   title = "Time Frame",
-                  sliderInput("slider", "Number of observations:", min = 1985, max = 2017,
+                  sliderInput("slider", "Year:", min = 1985, max = 2017,
                               value = c(1995,2000))
                 )
               )
@@ -34,7 +34,7 @@ ui <- dashboardPage(
                 
                 box(
                   title = "Time Frame",
-                  sliderInput("slider", "Number of observations:", min = 1985, max = 2017,
+                  sliderInput("slider", "Year:", min = 1985, max = 2017,
                               value = c(1995,2000))
                 )
               )

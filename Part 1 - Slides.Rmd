@@ -1,0 +1,47 @@
+---
+title: "Buoy Observations of Air And Sea Temperatures in The Southern Bering Sea"
+author: "Tiffany Cheng, Xiru Lyu"
+date: "3/9/2018"
+output: ioslides_presentation
+---
+```{r setup, include=FALSE,warning=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+source('Part 1.R')
+```
+
+## Air Temperature
+
+```{r,warning=FALSE,fig.width=8.5}
+plot.ATMP
+```
+
+
+## Air Temperature (Cont.) {.larger}
+
+## Sea Temperature
+
+```{r, warning=FALSE,fig.width=8.5}
+plot.WTMP
+```
+
+## Sea Temperature (Cont.) {.larger}
+
+
+## Relationship Between Air Temperature and Sea Temperature
+
+```{r,warning=FALSE,fig.width=8.5}
+plot.mixed
+```
+
+## Relationship Between Air and Sea Temperatures (Cont.)
+
+- The previous plot shows that air and sea temperatures are highly correlated, as they two follow a very similar pattern over time. In addition, the sea temperature is always above 0ºC and is generally higher than the air temperature each day. 
+
+- A further check for the correlation between two variables with the following code yields the result of `r corr`, which confirms our findings from the plot.
+
+      ```
+      cor(tidy$ATMP, tidy$WTMP, use = 'complete.obs')
+      ```
+
+## Issue with Missing Data
+
