@@ -45,7 +45,6 @@ group1 <- group1 %>% rbind.fill() %>% as.tibble %>%
   mutate(WTMP = replace(WTMP, WTMP == 99, NA)) %>% 
   unite(Date,YYYY,MM,DD,sep = "-")
 
-
 group2 <- group2 %>% rbind.fill() %>% as.tibble %>% 
   select(YYYY,MM,DD,hh,ATMP,WTMP) %>% 
   filter(hh == 12) %>% 
@@ -73,9 +72,9 @@ tidy <- bind_rows(group1,group2,group3)
 tidy$Date <- as.Date(tidy$Date)   # use this to plot
 
 # save workspace as RData file
-save.image(file="./Data/part1_tidydata.RData")
+# save.image(file="./Data/part1_tidydata.RData")
 
-# directly load this file if needed
+# directly load this file
 # load("./Data/part1_tidydata.RData") 
 
 plot.ATMP <- ggplot(tidy,aes(Date, ATMP)) + geom_line() +
@@ -108,10 +107,10 @@ oneway.test(ATMP ~ Year, data = tidy) # significant change in air temperature
 oneway.test(WTMP ~ Year, data = tidy) # significant change in sea temperature
 
 
-m.air <- tidy2 %>% group_by(Year) %>% summarize(m.air = mean(ATMP, na.rm = TRUE)) 
-m.sea <- tidy2 %>% group_by(Year) %>% summarize(m.sea = mean(WTMP, na.rm = TRUE))
+m.air <- tidy %>% group_by(Year) %>% summarize(m.air = mean(ATMP, na.rm = TRUE)) 
+m.sea <- tidy %>% group_by(Year) %>% summarize(m.sea = mean(WTMP, na.rm = TRUE))
 
-var.air <- tidy2 %>% group_by(Date) %>% summarize(var.air = var(ATMP, na.rm = TRUE))
-var.sea <- tidy2 %>% group_by(Date) %>% summarize(var.sea = var(WTMP, na.rm = TRUE))
+var.air <- tidy %>% group_by(Date) %>% summarize(var.air = var(ATMP, na.rm = TRUE))
+var.sea <- tidy %>% group_by(Date) %>% summarize(var.sea = var(WTMP, na.rm = TRUE))
 
 

@@ -15,8 +15,19 @@ source('Part 1.R')
 plot.ATMP
 ```
 
+- There is a seasonal pattern repeating every year, and generally the air temperature is between -10ºC and 10ºC.
 
-## Air Temperature (Cont.) {.larger}
+## Has the mean air temperature changed for past 30 years? {.smaller}
+
+- We used the mean air temperature every year to conduct a one-way ANOVA test to see if it changes over time.
+
+  $$H_{0}: \mu_{1985} = \mu_{1986} = \mu_{1987} = ... = \mu_{2017}$$
+  $$H_{a}: At\ least\ one\ of\ the\ means\ is\ different$$
+```{r}
+oneway.test(ATMP ~ Year, data = tidy)
+```
+
+- With a significance level of 0.05, the result of the test suggests that there is statistically significant change in mean air temperature in the past 30 years.
 
 ## Sea Temperature
 
@@ -24,8 +35,20 @@ plot.ATMP
 plot.WTMP
 ```
 
-## Sea Temperature (Cont.) {.larger}
+- There is a seasonal pattern repeating every year, and generally the sea temperature is always above 0ºC.
 
+## Has the mean sea temperature changed for past 30 years? {.smaller}
+
+- We used the mean sea temperature every year to conduct a one-way ANOVA test to see if it changes over time. 
+
+  $$H_{0}: \mu_{1985} = \mu_{1986} = \mu_{1987} = ... = \mu_{2017}$$
+  $$H_{a}: At\ least\ one\ of\ the\ means\ is\ different$$
+  
+```{r}
+oneway.test(WTMP ~ Year, data = tidy)
+```
+
+- With a significance level of 0.05, the result of the test suggests that there is statistically significant change in mean sea temperature in the past 30 years.
 
 ## Relationship Between Air Temperature and Sea Temperature
 
