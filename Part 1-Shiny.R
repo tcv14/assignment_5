@@ -50,25 +50,15 @@ server <- function(input, output) {
   source("Part 1.R",local=TRUE)
   # Plot time series of ATMP vs. Date
   output$plot1 <- renderPlot({
-    selected1 <- tidy.shiny$Year==min(input$slider1):max(input$slider1)
-    year.selected1 <- tidy.shiny$Year[which(selected1)]
-    ATMP.selected <- tidy.shiny$ATMP[which(selected1)]
-    tidy.ATMP <- dplyr::bind_cols(data.frame(year.selected1),data.frame(ATMP.selected),
-                                  data.frame(tidy.shiny$Date[which(selected1)])) %>%
-      dplyr::rename(Date=`tidy.shiny.Date.which.selected1..`)
-    ggplot(tidy.ATMP,aes(Date, ATMP.selected)) + geom_line(na.rm=TRUE) +
+    tidy.ATMP <- dplyr::filter(tidy.shiny,Year %in% min(input$slider1):max(input$slider1))
+    ggplot(tidy.ATMP,aes(Date, ATMP)) + geom_line(na.rm=TRUE) +
       ylab('Air Temperature') + scale_x_date(date_breaks = '1 year',date_labels = '%b %y') +
       theme(axis.text.x=element_text(angle=65, hjust=1))
   })
   # Plot time series of WTMP vs. Date
   output$plot2 <- renderPlot({
-    selected2 <- tidy.shiny$Year==min(input$slider2):max(input$slider2)
-    year.selected2 <- tidy.shiny$Year[which(selected2)]
-    WTMP.selected <- tidy.shiny$WTMP[which(selected2)]
-    tidy.WTMP <- dplyr::bind_cols(data.frame(year.selected2),data.frame(WTMP.selected),
-                                  data.frame(tidy.shiny$Date[which(selected2)])) %>%
-      dplyr::rename(Date=`tidy.shiny.Date.which.selected2..`)
-    ggplot(tidy.WTMP,aes(Date, WTMP.selected)) + geom_line(na.rm=TRUE) +
+    tidy.WTMP <- dplyr::filter(tidy.shiny,Year %in% min(input$slider2):max(input$slider2))
+    ggplot(tidy.WTMP,aes(Date, WTMP)) + geom_line(na.rm=TRUE) +
       ylab('Sea Temperature') + scale_x_date(date_breaks = '1 year',date_labels = '%b %y') +
       theme(axis.text.x=element_text(angle=65, hjust=1))
   })
