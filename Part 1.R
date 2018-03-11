@@ -1,7 +1,6 @@
 # load required packages
 library(plyr)
 library(tidyverse)
-library(car)
 
 # download and save data
 
@@ -19,6 +18,7 @@ data <- function() {
   }
 }
 
+# use the line below to read data from the website
 # data() # uncomment this line if needed
 
 # read data
@@ -69,13 +69,73 @@ group3 <- group3 %>% rbind.fill() %>% as.tibble %>%
 
 tidy <- bind_rows(group1,group2,group3)
 
-tidy$Date <- as.Date(tidy$Date)   # use this to plot
+tidy$Date <- as.Date(tidy$Date)
+
+rm(group1)
+rm(group2)
+rm(group3)
+rm(ldf)
+
+# if we were to use complete observations
+
+ldf <- llply(list.files("./Data", pattern="*.rds", full.names=TRUE), readRDS)
+names(ldf) <- c(1985:2012,2014:2017)
+
+group1 <- ldf[1:15] # year 1985-1999
+group2 <- ldf[16:20] # year 2000-2004
+group3 <- ldf[21:32] # year 2005-2017 (excluding 2013)
+
+
+group1 <- group1 %>% rbind.fill() %>% as.tibble %>% 
+  select (YY,MM,DD,hh,ATMP,WTMP) %>% 
+  replace_na(list(YY=99)) %>%
+  mutate(century = 19) %>% 
+  unite(YYYY, century, YY, sep = "") %>% 
+  unite(Date,YYYY,MM,DD,sep = "-") %>% 
+  mutate(ATMP = replace(ATMP, ATMP == 999, NA)) %>% 
+  mutate(WTMP = replace(WTMP, WTMP == 999, NA)) %>% 
+  mutate(ATMP = replace(ATMP, ATMP == 99, NA)) %>% 
+  mutate(WTMP = replace(WTMP, WTMP == 99, NA)) %>% 
+  mutate(hh = NULL)
+
+
+group2 <- group2 %>% rbind.fill() %>% as.tibble %>% 
+  select(YYYY,MM,DD,hh,ATMP,WTMP) %>% 
+  mutate(ATMP = replace(ATMP, ATMP == 999, NA)) %>% 
+  mutate(WTMP = replace(WTMP, WTMP == 999, NA)) %>% 
+  mutate(ATMP = replace(ATMP, ATMP == 99, NA)) %>% 
+  mutate(WTMP = replace(WTMP, WTMP == 99, NA)) %>%
+  mutate(hh = NULL) %>% 
+  unite(Date,YYYY,MM,DD,sep="-")
+
+
+group3 <- group3 %>% rbind.fill() %>% as.tibble %>% 
+  select(YYYY,YY,MM,DD,hh,mm,ATMP,WTMP) %>% 
+  mutate(YYYY = ifelse(is.na(YY),YYYY,YY)) %>% 
+  unite(Date,YYYY,MM,DD,sep="-") %>% 
+  mutate(YY = NULL, hh = NULL, mm = NULL) %>% 
+  mutate(ATMP = replace(ATMP, ATMP == 999, NA)) %>% 
+  mutate(WTMP = replace(WTMP, WTMP == 999, NA)) %>% 
+  mutate(ATMP = replace(ATMP, ATMP == 99, NA)) %>% 
+  mutate(WTMP = replace(WTMP, WTMP == 99, NA)) 
+
+tidy.com <- bind_rows(group1,group2,group3) # contains complete observations
+
+tidy.com$Date <- as.Date(tidy.com$Date)
+
+rm(group1)
+rm(group2)
+rm(group3)
+rm(ldf)
 
 # save workspace as RData file
 # save.image(file="./Data/part1_tidydata.RData")
 
+------------------------------------------------------------------------
 # directly load this file
-# load("./Data/part1_tidydata.RData") 
+load("./Data/part1_tidydata.RData") 
+
+# time series plot
 
 plot.ATMP <- ggplot(tidy,aes(Date, ATMP)) + geom_line() +
   ylab('Air Temperature') + scale_x_date(date_breaks = '1 year',date_labels = '%b %y') +
@@ -93,6 +153,9 @@ plot.mixed <- ggplot(tidy, aes(Date)) +
 
 corr <- cor(tidy$ATMP,tidy$WTMP,use = 'complete.obs')
 
+
+# for shiny dashboard
+
 tidy.shiny <- tidy %>%
   separate(Date, into=c("Year","Month","Day"),sep='-') %>%
   mutate(Date=str_c(Year,Month,Day,sep="-"))
@@ -108,11 +171,10 @@ tidy$Year <- as.factor(format(as.Date(tidy$Date),"%Y"))
 oneway.test(ATMP ~ Year, data = tidy) # significant change in air temperature
 oneway.test(WTMP ~ Year, data = tidy) # significant change in sea temperature
 
+# issue with sampling method
 
-m.air <- tidy %>% group_by(Year) %>% summarize(m.air = mean(ATMP, na.rm = TRUE)) 
-m.sea <- tidy %>% group_by(Year) %>% summarize(m.sea = mean(WTMP, na.rm = TRUE))
+tidy.com$Year <- as.factor(format(as.Date(tidy.com$Date), "%Y"))
 
-var.air <- tidy %>% group_by(Date) %>% summarize(var.air = var(ATMP, na.rm = TRUE))
-var.sea <- tidy %>% group_by(Date) %>% summarize(var.sea = var(WTMP, na.rm = TRUE))
-
+oneway.test(ATMP ~ Year, data = tidy.com) # significant change in air temperature
+oneway.test(WTMP ~ Year, data = tidy.com) # significant change in air temperature
 
