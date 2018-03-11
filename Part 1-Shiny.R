@@ -6,8 +6,8 @@ ui <- dashboardPage(
   dashboardHeader(title = "Bouy 46035"),
   dashboardSidebar(
     sidebarMenu(
-      menuItem("ATMP", tabName = "ATMP", icon = icon("dashboard")),
-      menuItem("WTMP", tabName = "WTMP", icon = icon("th"))
+      menuItem("Air Temperature", tabName = "ATMP", icon = icon("dashboard")),
+      menuItem("Sea Temperature", tabName = "WTMP", icon = icon("th"))
     )
   ),
   dashboardBody(
