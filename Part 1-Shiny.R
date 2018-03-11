@@ -50,7 +50,6 @@ server <- function(input, output) {
   source("Part 1.R",local=TRUE)
   # Plot time series of ATMP vs. Date
   output$plot1 <- renderPlot({
-    tidy.shiny$Year <- tidy.shiny$Year[length(min(input$slider1):max(input$slider1))]
     selected1 <- tidy.shiny$Year==min(input$slider1):max(input$slider1)
     year.selected1 <- tidy.shiny$Year[which(selected1)]
     ATMP.selected <- tidy.shiny$ATMP[which(selected1)]
