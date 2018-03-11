@@ -56,7 +56,7 @@ server <- function(input, output) {
     tidy.ATMP <- dplyr::bind_cols(data.frame(year.selected1),data.frame(ATMP.selected),
                                   data.frame(tidy.shiny$Date[which(selected1)])) %>%
       dplyr::rename(Date=`tidy.shiny.Date.which.selected1..`)
-    ggplot(tidy.ATMP,aes(Date, ATMP.selected)) + suppressWarnings(geom_line()) +
+    ggplot(tidy.ATMP,aes(Date, ATMP.selected)) + geom_line(na.rm=TRUE) +
       ylab('Air Temperature') + scale_x_date(date_breaks = '1 year',date_labels = '%b %y') +
       theme(axis.text.x=element_text(angle=65, hjust=1))
   })
@@ -68,7 +68,7 @@ server <- function(input, output) {
     tidy.WTMP <- dplyr::bind_cols(data.frame(year.selected2),data.frame(WTMP.selected),
                                   data.frame(tidy.shiny$Date[which(selected2)])) %>%
       dplyr::rename(Date=`tidy.shiny.Date.which.selected2..`)
-    suppressWarnings(ggplot(tidy.WTMP,aes(Date, WTMP.selected))) + suppressWarnings(geom_line()) +
+    ggplot(tidy.WTMP,aes(Date, WTMP.selected)) + geom_line(na.rm=TRUE) +
       ylab('Sea Temperature') + scale_x_date(date_breaks = '1 year',date_labels = '%b %y') +
       theme(axis.text.x=element_text(angle=65, hjust=1))
   })
