@@ -50,7 +50,8 @@ server <- function(input, output) {
   source("Part 1.R",local=TRUE)
   # Plot time series of ATMP vs. Date
   output$plot1 <- renderPlot({
-    selected1 <- suppressWarnings(tidy.shiny$Year==min(input$slider1):max(input$slider1))
+    tidy.shiny$Year <- tidy.shiny$Year[length(min(input$slider1):max(input$slider1))]
+    selected1 <- tidy.shiny$Year==min(input$slider1):max(input$slider1)
     year.selected1 <- tidy.shiny$Year[which(selected1)]
     ATMP.selected <- tidy.shiny$ATMP[which(selected1)]
     tidy.ATMP <- dplyr::bind_cols(data.frame(year.selected1),data.frame(ATMP.selected),
@@ -62,7 +63,7 @@ server <- function(input, output) {
   })
   # Plot time series of WTMP vs. Date
   output$plot2 <- renderPlot({
-    selected2 <- suppressWarnings(tidy.shiny$Year==min(input$slider2):max(input$slider2))
+    selected2 <- tidy.shiny$Year==min(input$slider2):max(input$slider2)
     year.selected2 <- tidy.shiny$Year[which(selected2)]
     WTMP.selected <- tidy.shiny$WTMP[which(selected2)]
     tidy.WTMP <- dplyr::bind_cols(data.frame(year.selected2),data.frame(WTMP.selected),
