@@ -1,6 +1,9 @@
-# load required package
+# load required packages
+library(plyr)
+library(tidyverse)
 library(shiny)
 library(shinydashboard)
+source("Part 1.R")
 
 ui <- dashboardPage(
   dashboardHeader(title = "NOAA Bouy 46035"),
@@ -47,7 +50,6 @@ ui <- dashboardPage(
 )
 
 server <- function(input, output) {
-  source("Part 1.R",local=TRUE)
   # Plot time series of ATMP vs. Date
   output$plot1 <- renderPlot({
     tidy.ATMP <- dplyr::filter(tidy.shiny,Year %in% min(input$slider1):max(input$slider1))
