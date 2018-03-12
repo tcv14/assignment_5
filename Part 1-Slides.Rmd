@@ -9,6 +9,9 @@ knitr::opts_chunk$set(echo = FALSE)
 source('Part 1.R')
 ```
 
+
+## Background
+
 ## Air Temperature
 
 ```{r,warning=FALSE,fig.width=8.5}
@@ -68,3 +71,6 @@ plot.mixed
 
 ## Issue with Missing Data
 
+
+
+## Conclusion
