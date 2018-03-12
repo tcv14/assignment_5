@@ -18,19 +18,19 @@ source('Part 1.R')
 plot.ATMP
 ```
 
-- There is a seasonal pattern repeating every year, and generally the air temperature is between -10ºC and 10ºC.
+- There is a seasonal pattern repeating every year, and the air temperature is generally between -10ºC and 10ºC.
 
 ## Has the mean air temperature changed for past 30 years? {.smaller}
 
 - We used the mean air temperature every year to conduct a one-way ANOVA test to see if it changes over time.
 
   $$H_{0}: \mu_{1985} = \mu_{1986} = \mu_{1987} = ... = \mu_{2017}$$
-  $$H_{a}: At\ least\ one\ of\ the\ means\ is\ different$$
+  $$H_{a}: At\ least\ one\ \mu_i\ is\ different$$
 ```{r}
 oneway.test(ATMP ~ Year, data = tidy)
 ```
 
-- With a significance level of 0.05, the result of the test suggests that there is statistically significant change in mean air temperature in the past 30 years.
+- With a significance level of 0.05, the result of the test suggests that there is a statistically significant change in mean air temperature in the past 30 years.
 
 ## Sea Temperature
 
@@ -38,20 +38,20 @@ oneway.test(ATMP ~ Year, data = tidy)
 plot.WTMP
 ```
 
-- There is a seasonal pattern repeating every year, and generally the sea temperature is always above 0ºC.
+- There is a seasonal pattern repeating every year, and the sea temperature is generally always above 0ºC.
 
 ## Has the mean sea temperature changed for past 30 years? {.smaller}
 
 - We used the mean sea temperature every year to conduct a one-way ANOVA test to see if it changes over time. 
 
   $$H_{0}: \mu_{1985} = \mu_{1986} = \mu_{1987} = ... = \mu_{2017}$$
-  $$H_{a}: At\ least\ one\ of\ the\ means\ is\ different$$
+  $$H_{a}: At\ least\ one\ \mu_i\ is\ different$$
   
 ```{r}
 oneway.test(WTMP ~ Year, data = tidy)
 ```
 
-- With a significance level of 0.05, the result of the test suggests that there is statistically significant change in mean sea temperature in the past 30 years.
+- With a significance level of 0.05, the result of the test suggests that there is a statistically significant change in mean sea temperature in the past 30 years.
 
 ## Relationship Between Air Temperature and Sea Temperature
 
@@ -61,9 +61,9 @@ plot.mixed
 
 ## Relationship Between Air and Sea Temperatures (Cont.)
 
-- The previous plot shows that air and sea temperatures are highly correlated, as they two follow a very similar pattern over time. In addition, the sea temperature is always above 0ºC and is generally higher than the air temperature each day. 
+- The previous plot shows that air and sea temperatures are highly correlated, as they both follow a very similar pattern over time. In addition, the sea temperature is always above 0ºC and is generally higher than the air temperature each day. 
 
-- A further check for the correlation between two variables with the following code yields the result of `r corr`, which confirms our findings from the plot.
+- A further check for the correlation between two variables with the following code yields the result of `r corr`, which is very high and confirms our findings from the plot.
 
       ```
       cor(tidy$ATMP, tidy$WTMP, use = 'complete.obs')
