@@ -66,6 +66,7 @@ server <- function(input, output) {
       theme(axis.text.x=element_text(angle=65, hjust=1))
   })
   
+  # Plot time series of WTMP vs. Date
   output$plot2 <- renderPlot({
     selected2 <- tidy.shiny$Year==min(input$slider2):max(input$slider2)
     year.selected2 <- tidy.shiny$Year[which(selected2)]
