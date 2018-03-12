@@ -1,0 +1,12 @@
+name: assignment_5
+title:
+username:
+account: tcv14
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 297447
+bundleId: 1265059
+url: https://tcv14.shinyapps.io/assignment_5/
+when: 1520886864.02295
+asMultiple: FALSE
+asStatic: FALSE
