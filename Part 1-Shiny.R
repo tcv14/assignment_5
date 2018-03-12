@@ -9,8 +9,8 @@ ui <- dashboardPage(
   dashboardHeader(title = "NOAA Bouy 46035"),
   dashboardSidebar(
     sidebarMenu(
-      menuItem("Air Temperature", tabName = "ATMP", icon = icon("cloud",lib = "glyphicon")),
-      menuItem("Sea Temperature", tabName = "WTMP", icon = icon("tint",lib = "glyphicon"))
+      menuItem("Air Temperature", tabName = "ATMP", icon = icon("dashboard")),
+      menuItem("Sea Temperature", tabName = "WTMP", icon = icon("th"))
     )
   ),
   dashboardBody(
@@ -55,14 +55,14 @@ server <- function(input, output) {
     tidy.ATMP <- dplyr::filter(tidy.shiny,Year %in% min(input$slider1):max(input$slider1))
     ggplot(tidy.ATMP,aes(Date, ATMP)) + geom_line(na.rm=TRUE) +
       ylab('Air Temperature') + scale_x_date(date_breaks = '1 year',date_labels = '%b %y') +
-      theme(axis.text.x=element_text(angle=65, hjust=1))
+      theme(axis.text.x=element_text(angle=90, hjust=1))
   })
   # Plot time series of WTMP vs. Date
   output$plot2 <- renderPlot({
     tidy.WTMP <- dplyr::filter(tidy.shiny,Year %in% min(input$slider2):max(input$slider2))
     ggplot(tidy.WTMP,aes(Date, WTMP)) + geom_line(na.rm=TRUE) +
       ylab('Sea Temperature') + scale_x_date(date_breaks = '1 year',date_labels = '%b %y') +
-      theme(axis.text.x=element_text(angle=65, hjust=1))
+      theme(axis.text.x=element_text(angle=90, hjust=1))
   })
 }
 
