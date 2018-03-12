@@ -131,11 +131,9 @@ rm(ldf)
 # save workspace as RData file
 # save.image(file="./Data/part1_tidydata.RData")
 
-
-#######################################################
-
+------------------------------------------------------------------------
 # directly load this file
-load(file="./Data/part1_tidydata.RData")
+load("./Data/part1_tidydata.RData") 
 
 # time series plot
 
@@ -178,5 +176,5 @@ oneway.test(WTMP ~ Year, data = tidy) # significant change in sea temperature
 tidy.com$Year <- as.factor(format(as.Date(tidy.com$Date), "%Y"))
 
 oneway.test(ATMP ~ Year, data = tidy.com) # significant change in air temperature
-oneway.test(WTMP ~ Year, data = tidy.com) # significant change in sea temperature
+oneway.test(WTMP ~ Year, data = tidy.com) # significant change in air temperature
 
