@@ -7,7 +7,8 @@ ui <- dashboardPage(
   dashboardSidebar(
     sidebarMenu(
       menuItem("Air Temperature", tabName = "ATMP", icon = icon("cloud",lib = "glyphicon")),
-      menuItem("Sea Temperature", tabName = "WTMP", icon = icon("tint", lib = "glyphicon"))
+      menuItem("Sea Temperature", tabName = "WTMP", icon = icon("tint", lib = "glyphicon")),
+      menuItem("Comparison", tabName = "ATMP_WTMP", icon = icon("equalizer", lib = "glyphicon"))
     )
   ),
   dashboardBody(
@@ -40,6 +41,20 @@ ui <- dashboardPage(
                 box(
                   title = "Select Time Frame:",
                   sliderInput("slider2", "Year:", min = 1985, max = 2017,
+                              value = c(1995,2000))
+                )
+              )
+      ),
+      # Thrid tab content
+      tabItem(tabName = "ATMP_WTMP",
+              h2("Time Series Comparison of Air and Sea Temperature"),
+              fluidRow(
+                box(plotOutput("plot3", height = 500)),
+                
+                # Create a box for the slider
+                box(
+                  title = "Select Time Frame:",
+                  sliderInput("slider3", "Year:", min = 1985, max = 2017,
                               value = c(1995,2000))
                 )
               )
@@ -79,6 +94,32 @@ server <- function(input, output) {
     ggplot(tidy.WTMP,aes(Date, WTMP.selected)) + geom_line() +
       ylab('Sea Temperature') + scale_x_date(date_breaks = '1 year',date_labels = '%b %y') +
       theme(axis.text.x=element_text(angle=65, hjust=1))
+  })
+  
+  # Plot time series of both ATMP vs. Date and WTMP vs. Date
+  output$plot3 <- renderPlot({
+    
+    selected3 <- tidy.shiny$Year==min(input$slider3):max(input$slider3)
+    year.selected3 <- tidy.shiny$Year[which(selected3)]
+    ATMP.selected <- tidy.shiny$ATMP[which(selected3)]
+    WTMP.selected <- tidy.shiny$WTMP[which(selected3)]
+    
+    tidy.ATMP <- dplyr::bind_cols(data.frame(year.selected3),data.frame(ATMP.selected),
+                                  data.frame(tidy.shiny$Date[which(selected3)])) %>%
+      dplyr::rename(Date=`tidy.shiny.Date.which.selected3..`)
+    
+    tidy.WTMP <- dplyr::bind_cols(data.frame(year.selected3),data.frame(WTMP.selected),
+                                  data.frame(tidy.shiny$Date[which(selected3)])) %>%
+      dplyr::rename(Date=`tidy.shiny.Date.which.selected3..`)
+    
+    gridExtra::grid.arrange(ggplot(tidy.ATMP,aes(Date, ATMP.selected)) + geom_line() +
+                              ylab('Air Temperature') + scale_x_date(date_breaks = '1 year',date_labels = '%b %y') +
+                              theme(axis.text.x=element_text(angle=65, hjust=1)),
+                            ggplot(tidy.WTMP,aes(Date, WTMP.selected)) + geom_line() +
+                              ylab('Sea Temperature') + scale_x_date(date_breaks = '1 year',date_labels = '%b %y') +
+                              theme(axis.text.x=element_text(angle=65, hjust=1)),
+                            nrow=2
+                            )
   })
 }
 
