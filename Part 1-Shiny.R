@@ -46,6 +46,7 @@ ui <- dashboardPage(
               )
       ),
       # Thrid tab content
+      # Create a box for the plot
       tabItem(tabName = "ATMP_WTMP",
               h2("Time Series Comparison of Air and Sea Temperature"),
               fluidRow(
