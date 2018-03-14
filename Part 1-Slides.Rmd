@@ -26,6 +26,7 @@ plot.ATMP
 
   $$H_{0}: \mu_{1985} = \mu_{1986} = \mu_{1987} = ... = \mu_{2017}$$
   $$H_{a}: At\ least\ one\ \mu_i\ is\ different$$
+  
 ```{r}
 oneway.test(ATMP ~ Year, data = tidy)
 ```
@@ -69,8 +70,12 @@ plot.mixed
       cor(tidy$ATMP, tidy$WTMP, use = 'complete.obs')
       ```
 
-## Issue with Missing Data
+## Issue with Missing Data {.larger}
 
+- The dataset contains a lot of missing values. For example, there is no data available at all for 2013, and even if there exists a table for observations in 2012, no value was recorded in it. 
 
+- Besides these two special cases, missing values for the air temperature and the sea temperature also present in data for other years. 
+
+## Issue with Sampling Method
 
 ## Conclusion

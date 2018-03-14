@@ -21,6 +21,9 @@ data <- function() {
 # use the line below to read data from the website
 # data() # uncomment this line if needed
 
+
+## Part 1: tidy data for observations taken only at noon
+
 # read data
 
 ldf <- llply(list.files("./Data", pattern="*.rds", full.names=TRUE), readRDS)
@@ -30,13 +33,13 @@ group1 <- ldf[1:15] # year 1985-1999
 group2 <- ldf[16:20] # year 2000-2004
 group3 <- ldf[21:32] # year 2005-2017 (excluding 2013)
 
-# tidy data by group
+# tidy data by group because of similar structure in data
 
 group1 <- group1 %>% rbind.fill() %>% as.tibble %>% 
   select (YY,MM,DD,hh,ATMP,WTMP) %>% 
   replace_na(list(YY=99)) %>%
   filter(hh == 12) %>% 
-  mutate(century = 19) %>% 
+  mutate(century = 19) %>% # convert YY to YYYY
   unite(YYYY, century, YY, sep = "") %>% 
   mutate(hh = NULL) %>%  
   mutate(ATMP = replace(ATMP, ATMP == 999, NA)) %>% 
@@ -67,7 +70,7 @@ group3 <- group3 %>% rbind.fill() %>% as.tibble %>%
   mutate(ATMP = replace(ATMP, ATMP == 99, NA)) %>% 
   mutate(WTMP = replace(WTMP, WTMP == 99, NA))
 
-tidy <- bind_rows(group1,group2,group3)
+tidy <- bind_rows(group1,group2,group3) # combine three groups together to get the tidy data
 
 tidy$Date <- as.Date(tidy$Date)
 
@@ -76,10 +79,16 @@ rm(group2)
 rm(group3)
 rm(ldf)
 
-# if we were to use complete observations
+## Part 2: complete observations
+
+# if we were to use complete observations (observations taken not only at noon)
+
+# read data
 
 ldf <- llply(list.files("./Data", pattern="*.rds", full.names=TRUE), readRDS)
 names(ldf) <- c(1985:2012,2014:2017)
+
+# tidy data by group due to simialr structures
 
 group1 <- ldf[1:15] # year 1985-1999
 group2 <- ldf[16:20] # year 2000-2004
@@ -119,7 +128,7 @@ group3 <- group3 %>% rbind.fill() %>% as.tibble %>%
   mutate(ATMP = replace(ATMP, ATMP == 99, NA)) %>% 
   mutate(WTMP = replace(WTMP, WTMP == 99, NA)) 
 
-tidy.com <- bind_rows(group1,group2,group3) # contains complete observations
+tidy.com <- bind_rows(group1,group2,group3) # combine three groups to get the tidy data containing complete observations
 
 tidy.com$Date <- as.Date(tidy.com$Date)
 
@@ -136,20 +145,24 @@ load("./Data/part1_tidydata.RData")
 
 # time series plot
 
+# plot the time series plot of air temperature
 plot.ATMP <- ggplot(tidy,aes(Date, ATMP)) + geom_line() +
   ylab('Air Temperature') + scale_x_date(date_breaks = '1 year',date_labels = '%b %y') +
   theme(axis.text.x=element_text(angle=65, hjust=1))
 
+# plot the time series plot of sea temperature
 plot.WTMP <- ggplot(tidy,aes(Date, WTMP)) + geom_line() +
   ylab('Sea Temperature') + scale_x_date(date_breaks = '1 year',date_labels = '%b %y') +
   theme(axis.text.x=element_text(angle=65, hjust=1))
 
+# plot the time series plot of both air and sea temperature
 plot.mixed <- ggplot(tidy, aes(Date)) + 
   geom_line(aes(y = ATMP, color = "Air Temperature")) + 
   geom_line(aes(y = WTMP, color = "Sea Temperature")) +
   ylab('Temperature') + scale_x_date(date_breaks = '1 year',date_labels = '%b %y') +
   theme(axis.text.x=element_text(angle=65, hjust=1))
 
+# find the correlation between air temperature and sea temperature
 corr <- cor(tidy$ATMP,tidy$WTMP,use = 'complete.obs')
 
 
@@ -176,4 +189,3 @@ tidy.com$Year <- as.factor(format(as.Date(tidy.com$Date), "%Y"))
 
 oneway.test(ATMP ~ Year, data = tidy.com) # significant change in air temperature
 oneway.test(WTMP ~ Year, data = tidy.com) # significant change in sea temperature
-
