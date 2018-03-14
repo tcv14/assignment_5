@@ -49,4 +49,4 @@ toxicity <- tibble(
 # https://www.bartlett.com, and https://sitem.herts.ac.uk/
 
 # join veg.chem and toxicity tables together
-veg.chem <- veg.chem %>% bind_cols(toxicity)
+# veg.chem <- veg.chem %>% bind_cols(toxicity)
