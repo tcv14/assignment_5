@@ -26,7 +26,7 @@ veg.tidy <- veg %>%
 # get restricted use chemicals
 veg.chem <- veg.tidy %>%
   filter(Domain=="RESTRICTED USE CHEMICAL") %>%
-  select(Domain:`EPA Pesticide Chemical Code`) %>% 
+  select(Commodity, Domain:`EPA Pesticide Chemical Code`) %>% 
   unique() %>%
   arrange(Type) %>%
   dplyr::rename(`Active Ingrediant`=`Active Ingrediant or Action Taken`)
