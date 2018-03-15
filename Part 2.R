@@ -24,7 +24,14 @@ veg.tidy <- veg %>%
   select(-A,-Label,-C,-D,-E)
 
 # get restricted use chemicals
-veg.chem <- veg.tidy %>%
+veg.chem.28 <- veg.tidy %>%
+  filter(Domain=="RESTRICTED USE CHEMICAL") %>%
+  select(Domain:`EPA Pesticide Chemical Code`) %>% 
+  unique() %>%
+  arrange(Type) %>%
+  dplyr::rename(`Active Ingrediant`=`Active Ingrediant or Action Taken`)
+
+veg.chem.48 <- veg.tidy %>%
   filter(Domain=="RESTRICTED USE CHEMICAL") %>%
   select(Commodity, Domain:`EPA Pesticide Chemical Code`) %>% 
   unique() %>%
@@ -32,7 +39,7 @@ veg.chem <- veg.tidy %>%
   dplyr::rename(`Active Ingrediant`=`Active Ingrediant or Action Taken`)
 
 # table for toxicity
-toxicity <- tibble(
+toxicity.28 <- tibble(
   `Toxicity Measurements (oral, for an experimental rat)` = c("20-150 mg/kg", "5620-8350 mg/kg", "10 mg/kg",
                               "380 - 651 mg/kg", "54-70 mg/kg", "5000 mg/kg",
                               "2000 mg/kg", "869 - 1271 mg/kg", "3129 mg/kg",
@@ -45,8 +52,26 @@ toxicity <- tibble(
                               )
 )
 
+toxicity.48 <- tibble(
+  `Toxicity Measurements (oral, for an experimental rat)` = 
+    c("20-150 mg/kg", "5620-8350 mg/kg", "20-150 mg/kg", "10 mg/kg", 
+      "380 - 651 mg/kg", "54-70 mg/kg", "5000 mg/kg", "2000 mg/kg", 
+      "869 - 1271 mg/kg", "3129 mg/kg", "458 mg/kg", "450 mg/kg", 
+      "144 mg/kg", "12-48 mg/kg", "50-281 mg/kg", "50 mg/kg",
+      "430-4000 mg/kg", "1563 mg/kg", "86 mg/kg", "380 - 651 mg/kg", 
+      "54-70 mg/kg", "5000 mg/kg", "3129 mg/kg", "458 mg/kg", 
+      "450 mg/kg", "144 mg/kg", "12-48 mg/kg", "50-281 mg/kg", 
+      "50 mg/kg", "430-4000 mg/kg", "1563 mg/kg", "86 mg/kg", 
+      "2.75-720 mg/kg", "60-387 mg/kg", "1.9-12.5 mg/kg", "66.7-70.6 mg/kg", 
+      "2000 mg/kg", "869 - 1271 mg/kg", "150-2000 mg/kg", "2.75-720 mg/kg", 
+      ">4640 mg/kg", "55 mg/kg", "16-21 mg/kg", "39.1-398 mg/kg", 
+      "1.9-12.5 mg/kg", "55 mg/kg", "39.1-398 mg/kg", "115-165 mg/kg"
+  )
+)
+
 # information taken from www.fao.org, https://pubchem.ncbi.nlm.nih.gov, pmep.cce.cornell.edu, 
 # https://www.bartlett.com, and https://sitem.herts.ac.uk/
 
 # join veg.chem and toxicity tables together
-# veg.chem <- veg.chem %>% bind_cols(toxicity)
+veg.chem.28 <- veg.chem.28 %>% bind_cols(toxicity.28)
+veg.chem.48 <- veg.chem.48 %>% bind_cols(toxicity.48)
