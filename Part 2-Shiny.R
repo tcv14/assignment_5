@@ -4,28 +4,40 @@ library(shinydashboard)
 veg.chem <- readRDS("./Data/veg_chem.rds")
 
 ui <- dashboardPage(
-  dashboardHeader(title = "Restricted Chemicals"),
-  dashboardSidebar(),
+  
+  dashboardHeader(title = "Restricted Chemicals and Toxicity Level",titleWidth = 400),
+  
+  dashboardSidebar(width = 200),
+  
   dashboardBody(
-    fluidRow(
-        box(title = "Table", status = "primary",tableOutput("table")),width=12),
-    fluidRow(
-      column(width = 6,
-        box(
-        selectInput("type", "Type:", veg.chem$Type), 
-        selectInput("ac","Active Ingredient",filter(veg.chem,Type == input$type)$`Active Ingrediant`))
-    )
+    fluidPage(
+      sidebarLayout(
+        sidebarPanel(
+          htmlOutput("type"),
+          htmlOutput("active")
+        ),
+        mainPanel(tableOutput("table"))
+      ),
+      
+      tags$style(type="text/css",
+                 ".shiny-output-error { visibility: hidden; }",
+                 ".shiny-output-error:before { visibility: hidden; }") # inserted to suppress warning messages
     )
   )
 )
-
-
-server <- function(input, output) {
+server <- function(input, output){
+  output$type <- renderUI({
+    selectInput("type","Type:",veg.chem$Type)
+  })
+  
+  output$active <- renderUI({
+    data_available <- dplyr::filter(veg.chem, Type == input$type)$`Active Ingredient`
+    selectInput("ac","Active Ingredient:",data_available)
+  })
+  
   output$table <- renderTable({
-    filter(veg.chem, Type == input$type, `Active Ingrediant` == input$ac)
-  }, align = "l")
+    dplyr::filter(veg.chem,Type == input$type, `Active Ingredient` == input$ac)
+  })
 }
 
-# Run the application 
-shinyApp(ui = ui, server = server)
-
+shinyApp(ui,server)
