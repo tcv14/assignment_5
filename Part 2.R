@@ -18,9 +18,9 @@ veg.tidy <- veg %>%
   separate(`Production Practice`,into=c("Production Practice","Utilization Practice","Statistic Category"),sep=" / ") %>%
   separate(Domain,into=c("Domain","B"),sep=", ") %>%
   dplyr::rename(Type=`B`,Chemical=`Type`) %>%
-  separate(Chemical, into=c("C","Active Ingrediant or Action Taken"),sep=": ") %>%
-  separate(`Active Ingrediant or Action Taken`, into=c("D","Active Ingrediant or Action Taken","E"),sep=c(1,-2)) %>%
-  separate(`Active Ingrediant or Action Taken`, into=c("Active Ingrediant or Action Taken","EPA Pesticide Chemical Code"),sep="=") %>%
+  separate(Chemical, into=c("C","Active Ingredient or Action Taken"),sep=": ") %>%
+  separate(`Active Ingredient or Action Taken`, into=c("D","Active ingredient or Action Taken","E"),sep=c(1,-2)) %>%
+  separate(`Active ingredient or Action Taken`, into=c("Active ingredient or Action Taken","EPA Pesticide Chemical Code"),sep="=") %>%
   select(-A,-Label,-C,-D,-E)
 
 # get restricted use chemicals
@@ -29,14 +29,14 @@ veg.chem.28 <- veg.tidy %>%
   select(Domain:`EPA Pesticide Chemical Code`) %>% 
   unique() %>%
   arrange(Type) %>%
-  dplyr::rename(`Active Ingrediant`=`Active Ingrediant or Action Taken`)
+  dplyr::rename(`Active Ingredient`=`Active ingredient or Action Taken`)
 
 veg.chem.48 <- veg.tidy %>%
   filter(Domain=="RESTRICTED USE CHEMICAL") %>%
   select(Commodity, Domain:`EPA Pesticide Chemical Code`) %>% 
   unique() %>%
-  arrange(Type) %>%
-  dplyr::rename(`Active Ingrediant`=`Active Ingrediant or Action Taken`)
+  arrange(Type) %>% 
+  dplyr::rename(`Active Ingredient` = `Active ingredient or Action Taken`)
 
 # table for toxicity
 toxicity.28 <- tibble(
@@ -75,3 +75,6 @@ toxicity.48 <- tibble(
 # join veg.chem and toxicity tables together
 veg.chem.28 <- veg.chem.28 %>% bind_cols(toxicity.28)
 veg.chem.48 <- veg.chem.48 %>% bind_cols(toxicity.48)
+
+# save veg.chem.48 for shiny app
+saveRDS(veg.chem.48,"./Data/veg_chem.rds")
