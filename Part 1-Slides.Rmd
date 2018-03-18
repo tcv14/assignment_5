@@ -1,7 +1,7 @@
 ---
 title: "Buoy Observations of Air And Sea Temperatures in The Southern Bering Sea"
 author: "Tiffany Cheng, Xiru Lyu"
-date: "3/9/2018"
+date: "3/18/2018"
 output: ioslides_presentation
 ---
 ```{r setup, include=FALSE,warning=FALSE}
@@ -9,8 +9,8 @@ knitr::opts_chunk$set(echo = FALSE)
 source('Part 1.R')
 ```
 
-
 ## Background
+Global warming has been a hotly debated topic for many years. In order to explore this issue, 32 years of air and sea temperature taken from a bouy in the southern Bering Sea were examined.
 
 ## Air Temperature
 
@@ -20,7 +20,7 @@ plot.ATMP
 
 - There is a seasonal pattern repeating every year, and the air temperature is generally between -10ºC and 10ºC.
 
-## Has the mean air temperature changed for past 30 years? {.smaller}
+## Has the mean air temperature changed over the past 30 years? {.smaller}
 
 - We used the mean air temperature every year to conduct a one-way ANOVA test to see if it changes over time.
 
@@ -31,7 +31,7 @@ plot.ATMP
 oneway.test(ATMP ~ Year, data = tidy)
 ```
 
-- With a significance level of 0.05, the result of the test suggests that there is a statistically significant change in mean air temperature in the past 30 years.
+- With a significance level of $\alpha=0.05$, the result of the test suggests that there is a statistically significant change in mean air temperature in the past 30 years.
 
 ## Sea Temperature
 
@@ -41,7 +41,7 @@ plot.WTMP
 
 - There is a seasonal pattern repeating every year, and the sea temperature is generally always above 0ºC.
 
-## Has the mean sea temperature changed for past 30 years? {.smaller}
+## Has the mean sea temperature changed over the past 30 years? {.smaller}
 
 - We used the mean sea temperature every year to conduct a one-way ANOVA test to see if it changes over time. 
 
@@ -52,7 +52,7 @@ plot.WTMP
 oneway.test(WTMP ~ Year, data = tidy)
 ```
 
-- With a significance level of 0.05, the result of the test suggests that there is a statistically significant change in mean sea temperature in the past 30 years.
+- With a significance level of $\alpha=0.05$, the result of the test suggests that there is a statistically significant change in mean sea temperature in the past 30 years.
 
 ## Relationship Between Air Temperature and Sea Temperature
 
@@ -60,7 +60,7 @@ oneway.test(WTMP ~ Year, data = tidy)
 plot.mixed
 ```
 
-## Relationship Between Air and Sea Temperatures (Cont.)
+## Relationship Between Air and Sea Temperatures (cont.)
 
 - The previous plot shows that air and sea temperatures are highly correlated, as they both follow a very similar pattern over time. In addition, the sea temperature is always above 0ºC and is generally higher than the air temperature each day. 
 
@@ -72,10 +72,12 @@ plot.mixed
 
 ## Issue with Missing Data {.larger}
 
-- The dataset contains a lot of missing values. For example, there is no data available at all for 2013, and even if there exists a table for observations in 2012, no value was recorded in it. 
+- The dataset contains a lot of missing values. For example, there is no data available at all for 2013, and even if there exists a table for observations in 2012, no values were recorded in it. 
 
-- Besides these two special cases, missing values for the air temperature and the sea temperature also present in data for other years. 
+- Besides these two special cases, missing values for the air temperature and the sea temperature are also present in the data for other years. 
 
 ## Issue with Sampling Method
+Due to the nature of the sampled data (ie. only one observation per day at noon), it can be possible that the temperatures we are recording are higher because the sun is almost above the bouy at noon time. If we had picked the observations at night, the temperatures would probably be lower.
 
 ## Conclusion
+Based on the two one-way ANOVA tests presented above for mean air temperature and mean sea temperature, there are significant changes to mean temperatures over the past 32 years. In addition, from the time series graph, it is evident that there is an upward trend in temperature across the 32 years.
