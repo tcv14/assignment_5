@@ -10,7 +10,7 @@ source('Part 1.R')
 ```
 
 ## Background
-Global warming has been a hotly debated topic for many years. In order to explore this issue, 32 years of air and sea temperature taken from a bouy in the southern Bering Sea were examined.
+Global warming has been a hotly debated topic for many years. In order to explore this issue, 32 years of air and sea temperature taken from a bouy in the southern Bering Sea were examined. The data were taken from the National Data Bouy Center.
 
 ## Air Temperature
 
