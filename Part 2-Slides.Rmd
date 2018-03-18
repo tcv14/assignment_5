@@ -1,0 +1,67 @@
+---
+title: "Analysis of Restricted Use Chemicals Sprayed on Vegetables"
+author: "Tiffany Cheng and Xiru Lyu"
+date: "March 18, 2018"
+output: ioslides_presentation
+---
+
+```{r setup,warning=FALSE,include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+source('Part 2.R')
+```
+
+## Background {.smaller}
+In modern argriculture, many chemicals in the form of herbicides, pesticides, and insecticides are used to keep pests and weeds away from crops. Using chemicals has the advantage of yielding maximum harvests and maximum profits. However, these chemicals can be dangerous to wildlife and possibly the humans that eat these crops. In this study, we are interested in the chemicals labeled as "Restricted Use Chemicals" by the Enviromental Protection Agency (EPA) as well as their acute lethal dose 50 (LD50).
+
+## Initial Data Set {.smaller}
+- data downloaded from USDA National Agriculturural Statistics Service's [Quick Stats](https://quickstats.nass.usda.gov/) page
+- initial data set is not tidy
+```{r}
+head(veg[,1:6])
+head(veg[,7:11])
+```
+
+## Untidy Data: irrelevant columns {.smaller}
+- columns that have either one value and/or NA throughout the whole column can be eliminated in our analysis
+```{r}
+head(veg[,names(a[a==1])][,1:6])
+head(veg[,names(a[a==1])][,7:12])
+```
+
+## Untidy Data: Resourses {.smaller}
+- [Quick Stats Column Definitions](https://quickstats.nass.usda.gov/param_define) was useful in deciphering the meanings behind the column names in the data set
+- for example, the website describes the column "Data Item" as "a concatenation of six columns: commodity_desc, class_desc, prodn_practice_desc, util_practice_desc, statisticcat_desc, and unit_desc"
+- using this information, this column and other columns were split up in this manner
+```{r}
+veg[120,17]
+veg.tidy[120,5:10]
+```
+
+## Tidy Data {.smaller}
+- unnecessary columns are now deleted
+- columns are split to have one observation per cell
+- data set is now tidy
+```{r}
+head(veg.tidy[,1:6])
+head(veg.tidy[,7:9])
+```
+
+## Restricted Use Chemicals {.smaller}
+- tidy data set is filtered to see the "Restricted Use Chemicals" used
+```{r}
+head(veg.chem.48[,1:3])
+head(veg.chem.48[,4:5])
+```
+
+## Toxicity Level for Restricted Use Chemicals {.smaller}
+```{r}
+veg.chem.48 <- veg.chem.48 %>% dplyr::rename(`Toxicity Measurement`=`Toxicity Measurements (oral, for an experimental rat)`)
+bind_cols(head(veg.chem.48[,4]),head(veg.chem.48[,6]))
+```
+- the corresponding toxicity level was found for one experimental rat with the chemical taken orally
+- a lower LD50 dose corresponds to a moderately-high to high toxicity level and the higher the LD50 dose, the less toxic the chemical
+- unit of measurement "mg/kg" means that X mg of the chemical was taken per one kg of the rat's body weight
+- acute lethal dose, or LD50, means that with each dose, 50% of the subjects will die
+
+## Conclusion {.smaller}
+We examined broccoli, cauliflower, brussel sprouts, vegetable totals, and vegetable other and found that restricted use chemicals were only used on broccoli and cauliflower. In addition, some of these chemicals have very low LD50 levels, which are quite harmful. There are a shocking number of chemicals outside of restricted use chemicals that are sprayed on crops that can be very harmful to bees or other insects necessary for pollination and the health of crops. These insects can be easily killed by any dose of these chemicals due to their small body weight. Therefore, we should be mindful of the chemicals we use in nature.
