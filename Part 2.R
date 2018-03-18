@@ -21,7 +21,8 @@ veg.tidy <- veg %>%
   separate(Chemical, into=c("C","Active Ingredient or Action Taken"),sep=": ") %>%
   separate(`Active Ingredient or Action Taken`, into=c("D","Active ingredient or Action Taken","E"),sep=c(1,-2)) %>%
   separate(`Active ingredient or Action Taken`, into=c("Active ingredient or Action Taken","EPA Pesticide Chemical Code"),sep="=") %>%
-  select(-A,-Label,-C,-D,-E)
+  separate(Area,into=c("Area","G"),sep=" : ") %>%
+  select(-A,-Label,-C,-D,-E,-G)
 
 # get restricted use chemicals
 veg.chem.28 <- veg.tidy %>%
