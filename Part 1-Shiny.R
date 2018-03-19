@@ -88,10 +88,10 @@ server <- function(input, output) {
     tidy.ATMP <- filter(tidy.shiny, tidy.shiny$Year==c(min(input$slider3):max(input$slider3)))
     tidy.WTMP <- filter(tidy.shiny, tidy.shiny$Year==c(min(input$slider3):max(input$slider3)))
     # Create two plots stacked on top of each other
-    gridExtra::grid.arrange(ggplot(tidy.ATMP,aes(Date, ATMP)) + geom_line() +
+    gridExtra::grid.arrange(ggplot(tidy.ATMP,aes(Date, ATMP)) + geom_line(color = "rosybrown3") +
                               ylab('Air Temperature') + scale_x_date(date_breaks = '1 year',date_labels = '%b %y') +
                               theme(axis.text.x=element_text(angle=65, hjust=1)),
-                            ggplot(tidy.WTMP,aes(Date, WTMP)) + geom_line() +
+                            ggplot(tidy.WTMP,aes(Date, WTMP)) + geom_line(color = "cornflowerblue") +
                               ylab('Sea Temperature') + scale_x_date(date_breaks = '1 year',date_labels = '%b %y') +
                               theme(axis.text.x=element_text(angle=65, hjust=1)),
                             nrow=2
