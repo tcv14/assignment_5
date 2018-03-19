@@ -19,7 +19,7 @@ data <- function() {
 }
 
 # use the line below to read data from the website
-# data() # uncomment this line if needed
+data()
 
 
 ## Part 1: tidy data for observations taken only at noon
@@ -138,7 +138,7 @@ rm(group3)
 rm(ldf)
 
 # save workspace as RData file
-# save.image(file="./Data/part1_tidydata.RData")
+save.image(file="./Data/part1_tidydata.RData")
 
 # directly load this file
 load("./Data/part1_tidydata.RData") 
