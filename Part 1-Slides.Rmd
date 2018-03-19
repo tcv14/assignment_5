@@ -14,14 +14,14 @@ Global warming has been a hotly debated topic for many years. In order to explor
 
 ## Data Selection
 
-- Data on air and sea temperatures used in this analysis come from NOAA Weather Station buoy 46035 at 57.026 N 177.738 W in the NOAA National Data Buoy Center, and it covers the time period from 1985 to 2017. However, data in 2012 and 2013 are completely missing.
+- Data on air and sea temperatures used in this analysis come from NOAA Weather Station buoy 46035 at 57.026 N 177.738 W in the NOAA National Data Buoy Center and it covers the time period from 1985 to 2017. However, data in 2012 and 2013 are completely missing.
 
 - The majority part of the analysis is based on temperature data recorded at noon. 
 
-    + Note that methods of recording data changes over time so we adjust our methods of data selection accordingly
+    + Note that methods of recording data change over time so we adjusted our methods of data selection accordingly
     
-        + for data before 2009: we select temperatures recorded exactly at noon (ie. 12:00 PM)
-        + for data in/after 2009: we select temperatures recorded slightly before noon (ie. 11:50 AM)
+        + for data before 2009: we selected temperatures recorded exactly at noon (ie. 12:00 PM)
+        + for data in/after 2009: we selected temperatures recorded slightly before noon (ie. 11:50 AM)
         
 ## Air Temperature
 
@@ -44,7 +44,7 @@ oneway.test(ATMP ~ Year, data = tidy)
 
 - With a significance level of $\alpha=0.05$, the result of the test suggests that there is a statistically significant change in mean air temperature in the past 30 years.
 
-- *Note: We conducted the one-way test which not assuming equal variances, and this condition is assumed for all one-way tests in the following sections.*
+- *Note: We conducted this one-way test not assuming equal variances, and this condition is assumed for all one-way tests in the following sections.*
 
 ## Sea Temperature
 
@@ -91,7 +91,7 @@ plot.mixed
 
 ## Issue with Sampling Method
 
-- Due to the nature of the sampled data (ie. only one observation per day at noon), it can be possible that the temperatures we are recording are higher because the sun is almost above the buoy at noon time. If we had picked the observations at night, the temperatures would probably be lower.
+- Due to the nature of the sampled data (ie. only one observation per day at noon), it can be possible that the temperatures we are using are higher because the sun is almost above the buoy at noon time. If we had picked the observations at night, the temperatures would probably be lower.
 
 - We tried to improve our sampling method by analyzing all data provided by the website instead of selecting only one observation for each day.
 
