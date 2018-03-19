@@ -128,4 +128,4 @@ oneway.test(WTMP ~ Year, data = tidy.com)
 
 ## Conclusion {.larger}
 
-Based on the two one-way ANOVA tests presented above for mean air temperature and mean sea temperature, there are significant changes to mean temperatures over the past 32 years. In addition, from the time series graph, it is evident that there is an upward trend in temperature across the 32 years.
+Based on one-way ANOVA tests presented above for mean air temperature and mean sea temperature, there are significant changes to mean temperatures over the past 32 years. In addition, from the time series graph, it is evident that there is an upward trend in both air and sea temperatures across the 32 years.
