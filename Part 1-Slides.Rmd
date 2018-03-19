@@ -10,8 +10,19 @@ source('Part 1.R')
 ```
 
 ## Background
-Global warming has been a hotly debated topic for many years. In order to explore this issue, 32 years of air and sea temperature taken from a bouy in the southern Bering Sea were examined. The data were taken from the National Data Bouy Center.
+Global warming has been a hotly debated topic for many years. In order to explore this issue, 32 years of air and sea temperature taken from a buoy in the southern Bering Sea were examined. The data were taken from the National Data Buoy Center.
 
+## Data Selection
+
+- Data on air and sea temperatures used in this analysis come from NOAA Weather Station buoy 46035 at 57.026 N 177.738 W in the NOAA National Data Buoy Center, and it covers the time period from 1985 to 2017. However, data in 2012 and 2013 are completely missing.
+
+- The majority part of the analysis is based on temperature data recorded at noon. 
+
+    + Note that methods of recording data changes over time so we adjust our methods of data selection accordingly
+    
+        + for data before 2009: we select temperatures recorded exactly at noon (ie. 12:00 PM)
+        + for data in/after 2009: we select temperatures recorded slightly before noon (ie. 11:50 AM)
+        
 ## Air Temperature
 
 ```{r,warning=FALSE,fig.width=8.5}
@@ -32,6 +43,8 @@ oneway.test(ATMP ~ Year, data = tidy)
 ```
 
 - With a significance level of $\alpha=0.05$, the result of the test suggests that there is a statistically significant change in mean air temperature in the past 30 years.
+
+- *Note: We conducted the one-way test which not assuming equal variances, and this condition is assumed for all one-way tests in the following sections.*
 
 ## Sea Temperature
 
@@ -77,7 +90,42 @@ plot.mixed
 - Besides these two special cases, missing values for the air temperature and the sea temperature are also present in the data for other years. 
 
 ## Issue with Sampling Method
-Due to the nature of the sampled data (ie. only one observation per day at noon), it can be possible that the temperatures we are recording are higher because the sun is almost above the bouy at noon time. If we had picked the observations at night, the temperatures would probably be lower.
 
-## Conclusion
+- Due to the nature of the sampled data (ie. only one observation per day at noon), it can be possible that the temperatures we are recording are higher because the sun is almost above the buoy at noon time. If we had picked the observations at night, the temperatures would probably be lower.
+
+- We tried to improve our sampling method by analyzing all data provided by the website instead of selecting only one observation for each day.
+
+- In order to check if including all data would change the result of the analysis, we conducted one-way ANOVA tests for both air and sea temperatures. 
+
+## Issue with Sampling Method (cont.) {.smaller}
+
+**Does a change in the sampling method lead to a different result?**
+
+- Air temperature 
+
+  $$H_{0}: \mu_{1985} = \mu_{1986} = \mu_{1987} = ... = \mu_{2017}$$
+  $$H_{a}: At\ least\ one\ \mu_i\ is\ different$$
+```{r}
+oneway.test(ATMP ~ Year, data = tidy.com)
+```
+  
+- With a significance level of $\alpha=0.05$, and a p-value < 2.2e-16, the result of the test suggests that even with all data provided on the website, there is still a statistically significant change in mean air temperature in the past 30 years.
+
+## Issue with Sampling Method (cont.) {.smaller}
+
+**Does a change in the sampling method lead to a different result?**
+
+- Sea temperature
+
+  $$H_{0}: \mu_{1985} = \mu_{1986} = \mu_{1987} = ... = \mu_{2017}$$
+  $$H_{a}: At\ least\ one\ \mu_i\ is\ different$$
+  
+```{r}
+oneway.test(WTMP ~ Year, data = tidy.com)
+```
+
+- With a significance level of $\alpha=0.05$, and a p-value < 2.2e-16, the result of the test suggests that even with all data provided on the website, there is still a statistically significant change in mean sea temperature in the past 30 years.
+
+## Conclusion {.larger}
+
 Based on the two one-way ANOVA tests presented above for mean air temperature and mean sea temperature, there are significant changes to mean temperatures over the past 32 years. In addition, from the time series graph, it is evident that there is an upward trend in temperature across the 32 years.
