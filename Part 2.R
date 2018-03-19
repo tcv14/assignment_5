@@ -22,7 +22,9 @@ veg.tidy <- veg %>%
   separate(`Active Ingredient or Action Taken`, into=c("D","Active ingredient or Action Taken","E"),sep=c(1,-2)) %>%
   separate(`Active ingredient or Action Taken`, into=c("Active ingredient or Action Taken","EPA Pesticide Chemical Code"),sep="=") %>%
   separate(Area,into=c("Area","G"),sep=" : ") %>%
-  select(-A,-Label,-C,-D,-E,-G)
+  select(-A,-Label,-C,-D,-E,-G) %>% 
+  mutate(Value = replace(Value, Value == "(NA)", NA)) %>% 
+  mutate(Value = replace(Value, Value == "(D)", NA))
 
 # get restricted use chemicals
 veg.chem.28 <- veg.tidy %>%
@@ -32,6 +34,7 @@ veg.chem.28 <- veg.tidy %>%
   arrange(Type) %>%
   dplyr::rename(`Active Ingredient`=`Active ingredient or Action Taken`)
 
+# this is the restricted use chemicals dataset adjusted for commodity
 veg.chem.48 <- veg.tidy %>%
   filter(Domain=="RESTRICTED USE CHEMICAL") %>%
   select(Commodity, Domain:`EPA Pesticide Chemical Code`) %>% 
@@ -51,7 +54,7 @@ toxicity.28 <- tibble(
                               "66.7-70.6 mg/kg", "150-2000 mg/kg", ">4640 mg/kg",
                               "55 mg/kg", "16-21 mg/kg", "39.1-398 mg/kg", "115-165 mg/kg"
                               )
-)
+) # toxicity level for distinct 28 restricted chemicals
 
 toxicity.48 <- tibble(
   `Toxicity Measurements (oral, for an experimental rat)` = 
@@ -68,9 +71,9 @@ toxicity.48 <- tibble(
       ">4640 mg/kg", "55 mg/kg", "16-21 mg/kg", "39.1-398 mg/kg", 
       "1.9-12.5 mg/kg", "55 mg/kg", "39.1-398 mg/kg", "115-165 mg/kg"
   )
-)
+) # toxicity level for restricted chemicals, adjusted for commodity
 
-# information taken from www.fao.org, https://pubchem.ncbi.nlm.nih.gov, pmep.cce.cornell.edu, 
+# information taken from www.fao.org, https://pubchem.ncbi.nlm.nih.gov, www.pmep.cce.cornell.edu, 
 # https://www.bartlett.com, and https://sitem.herts.ac.uk/
 
 # join veg.chem and toxicity tables together
