@@ -80,5 +80,5 @@ toxicity.48 <- tibble(
 veg.chem.28 <- veg.chem.28 %>% bind_cols(toxicity.28)
 veg.chem.48 <- veg.chem.48 %>% bind_cols(toxicity.48)
 
-# save veg.chem.48 for shiny app
-saveRDS(veg.chem.48,"./Data/veg_chem.rds")
+# save veg.chem.48 and veg.tidy for shiny app
+save(veg.chem.48,veg.tidy, file="./Data/veg_chem.RData")
