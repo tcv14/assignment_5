@@ -87,8 +87,17 @@ server <- function(input, output){
   })
   
   output$graphs <- renderPlot({
-    newdata <- filter(veg.tidy, Year == input$year)
-    ggplot(newdata) + geom_bar(aes(x=input$variable))
+    
+    newdata <- filter(veg.tidy, Year==input$year)
+    if (input$variable=="Commodity") {
+      ggplot(newdata, aes(Commodity)) + geom_bar(stat="count")
+    }
+    if (input$variable=="Domain") {
+      ggplot(newdata, aes(Domain)) + geom_bar(stat="count")
+    }
+    else {
+      ggplot(newdata, aes(Type)) + geom_bar(stat="count")
+    }
   })
 }
 
