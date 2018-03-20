@@ -9,7 +9,6 @@ load("./Data/veg_chem.RData")
 # reorganize the table so it would be more informative 
 veg.chem.48 <- veg.chem.48 %>% select(`EPA Pesticide Chemical Code`,`Active Ingredient`, 
                                 "Type", "Commodity", `Toxicity Measurements (oral, for an experimental rat)`)
-ggplot(veg.tidy, aes(Year)) + geom_bar(aes(Type))
 
 # define the UI of the app
 ui <- dashboardPage(skin="green",
@@ -61,7 +60,6 @@ ui <- dashboardPage(skin="green",
   )
 )
   
-
 
 # define server for reactive inputs and rendering table, text
 server <- function(input, output){
