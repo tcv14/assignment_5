@@ -5,7 +5,7 @@ library(readxl)
 # read in data
 veg <- read_xlsx("./Data/veg1.xlsx")
 
-# tidy veg data
+# tidy veg data by renaming columns and separating columns
 a <- apply(veg, 2, n_distinct)
 b <- names(a[a>1])
 veg.tidy <- veg %>% 
@@ -26,7 +26,7 @@ veg.tidy <- veg %>%
   mutate(Value = replace(Value, Value == "(NA)", NA)) %>% 
   mutate(Value = replace(Value, Value == "(D)", NA))
 
-# get restricted use chemicals
+# filter veg.tidy data set to get unique restricted use chemicals
 veg.chem.28 <- veg.tidy %>%
   filter(Domain=="RESTRICTED USE CHEMICAL") %>%
   select(Domain:`EPA Pesticide Chemical Code`) %>% 
@@ -34,7 +34,7 @@ veg.chem.28 <- veg.tidy %>%
   arrange(Type) %>%
   dplyr::rename(`Active Ingredient`=`Active ingredient or Action Taken`)
 
-# this is the restricted use chemicals dataset adjusted for commodity
+# this is the restricted use chemicals dataset for all commodities
 veg.chem.48 <- veg.tidy %>%
   filter(Domain=="RESTRICTED USE CHEMICAL") %>%
   select(Commodity, Domain:`EPA Pesticide Chemical Code`) %>% 
@@ -42,7 +42,8 @@ veg.chem.48 <- veg.tidy %>%
   arrange(Type) %>% 
   dplyr::rename(`Active Ingredient` = `Active ingredient or Action Taken`)
 
-# table for toxicity
+# using only the restricted use chemicals data set
+# table for toxicity level for distinct 28 restricted chemicals
 toxicity.28 <- tibble(
   `Toxicity Measurements (oral, for an experimental rat)` = c("20-150 mg/kg", "5620-8350 mg/kg", "10 mg/kg",
                               "380 - 651 mg/kg", "54-70 mg/kg", "5000 mg/kg",
@@ -54,8 +55,9 @@ toxicity.28 <- tibble(
                               "66.7-70.6 mg/kg", "150-2000 mg/kg", ">4640 mg/kg",
                               "55 mg/kg", "16-21 mg/kg", "39.1-398 mg/kg", "115-165 mg/kg"
                               )
-) # toxicity level for distinct 28 restricted chemicals
+)
 
+# table for toxicity level for all commodities
 toxicity.48 <- tibble(
   `Toxicity Measurements (oral, for an experimental rat)` = 
     c("20-150 mg/kg", "5620-8350 mg/kg", "20-150 mg/kg", "10 mg/kg", 
@@ -71,7 +73,7 @@ toxicity.48 <- tibble(
       ">4640 mg/kg", "55 mg/kg", "16-21 mg/kg", "39.1-398 mg/kg", 
       "1.9-12.5 mg/kg", "55 mg/kg", "39.1-398 mg/kg", "115-165 mg/kg"
   )
-) # toxicity level for restricted chemicals, adjusted for commodity
+)
 
 # information taken from www.fao.org, https://pubchem.ncbi.nlm.nih.gov, www.pmep.cce.cornell.edu, 
 # https://www.bartlett.com, and https://sitem.herts.ac.uk/
