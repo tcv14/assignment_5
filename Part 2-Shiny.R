@@ -43,8 +43,8 @@ ui <- dashboardPage(skin="green",
               fluidPage(
                 sidebarLayout(
                   sidebarPanel(
-                    selectInput("year", "Year:", unique(veg.tidy$Year)), # reactive input
-                    selectInput("variable", "Variable:", c("Commodity", "Domain", "Type")) # reactive input
+                    selectInput("year", "Year:", unique(veg.tidy$Year)), # input for year 
+                    selectInput("variable", "Variable:", c("Commodity", "Domain", "Type")) # input for variable type
                   ),
                   mainPanel(htmlOutput("text2"), # text output, for explanations of graphs
                             plotOutput("graphs") # graph output ) 
@@ -78,11 +78,11 @@ server <- function(input, output){
   
   output$text1 <- renderText({
     paste('<B>Information taken from:</B>',"<p>https://www.fao.org</p>","<p>https://pubchem.ncbi.nlm.nih.gov</p>", "<p>https://pmep.cce.cornell.edu</p>", "<p>https://www.bartlett.com</p>", "<p>https://sitem.herts.ac.uk</p>")  # text ouput
-  })
+  }) # render the text 
   
   output$text2 <- renderText({
     paste('<b>Instructions:</b>', "Select year and the name of one variable to see a histogram of the variable for that year.")
-  })
+  }) # render the text
   
   output$graphs <- renderPlot({
     
@@ -99,7 +99,7 @@ server <- function(input, output){
       ggplot(newdata, aes(Type)) + geom_bar(stat="count") +
         theme(axis.text.x=element_text(angle=65, hjust=1))
     }
-  })
+  }) # render a bargraph based on selected year and variable type
 }
 
 # run the app
