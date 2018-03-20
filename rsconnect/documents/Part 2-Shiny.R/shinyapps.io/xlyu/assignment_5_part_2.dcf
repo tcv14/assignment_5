@@ -5,9 +5,9 @@ account: xlyu
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 300959
-bundleId: 1274042
+bundleId: 1277703
 url: https://xlyu.shinyapps.io/assignment_5_part_2/
-when: 1521321770.20987
+when: 1521511196.69939
 asMultiple: FALSE
 asStatic: FALSE
 ignoredFiles: Part 1-Shiny.R
