@@ -40,7 +40,7 @@ ui <- dashboardPage(
       ),
       
       tabItem(tabName = "other",
-              h2("Other Helpful Graphs and Tables"),
+              h2("Other Helpful Graphs"),
               fluidPage(
                 sidebarLayout(
                   sidebarPanel(
