@@ -12,7 +12,7 @@ veg.chem.48 <- veg.chem.48 %>% select(`EPA Pesticide Chemical Code`,`Active Ingr
 ggplot(veg.tidy, aes(Year)) + geom_bar(aes(Type))
 
 # define the UI of the app
-ui <- dashboardPage(
+ui <- dashboardPage(skin="green",
   
   dashboardHeader(title = "Vegetables and Chemicals",titleWidth = 300), # create the title of the app
   
@@ -90,13 +90,16 @@ server <- function(input, output){
     
     newdata <- filter(veg.tidy, Year==input$year)
     if (input$variable=="Commodity") {
-      ggplot(newdata, aes(Commodity)) + geom_bar(stat="count")
+      ggplot(newdata, aes(Commodity)) + geom_bar(stat="count") + 
+        theme(axis.text.x=element_text(angle=65, hjust=1))
     }
     else if (input$variable=="Domain") {
-      ggplot(newdata, aes(Domain)) + geom_bar(stat="count")
+      ggplot(newdata, aes(Domain)) + geom_bar(stat="count") +
+        theme(axis.text.x=element_text(angle=65, hjust=1))
     }
     else {
-      ggplot(newdata, aes(Type)) + geom_bar(stat="count")
+      ggplot(newdata, aes(Type)) + geom_bar(stat="count") +
+        theme(axis.text.x=element_text(angle=65, hjust=1))
     }
   })
 }
