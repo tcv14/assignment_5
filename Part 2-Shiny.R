@@ -4,56 +4,92 @@ library(shinydashboard)
 library(tidyverse)
 
 # load data for shiny app
-veg.chem <- readRDS("./Data/veg_chem.rds")
+load("./Data/veg_chem.RData")
 
 # reorganize the table so it would be more informative 
-veg.chem <- veg.chem %>% select(`EPA Pesticide Chemical Code`,`Active Ingredient`, 
+veg.chem.48 <- veg.chem.48 %>% select(`EPA Pesticide Chemical Code`,`Active Ingredient`, 
                                 "Type", "Commodity", `Toxicity Measurements (oral, for an experimental rat)`)
+ggplot(veg.tidy, aes(Year)) + geom_bar(aes(Type))
 
 # define the UI of the app
 ui <- dashboardPage(
   
-  dashboardHeader(title = "Restricted Chemicals and Toxicity Level",titleWidth = 400), # create the title of the app
+  dashboardHeader(title = "Vegetables and Chemicals",titleWidth = 300), # create the title of the app
   
-  dashboardSidebar(width = 200), # define the width of the sidebar
+  dashboardSidebar(
+    sidebarMenu(
+      menuItem("Toxicity Level", tabName = "toxicity", icon = icon("tree-deciduous",lib = "glyphicon")),
+      menuItem("Other Graphs", tabName = "other", icon = icon("picture", lib = "glyphicon"))
+      ),
+    width = 200), # define the width of the sidebar
   
   dashboardBody(
-    fluidPage(
-      sidebarLayout(
-        sidebarPanel(
-          htmlOutput("type"), # reactive input
-          htmlOutput("active") # reactive input
-        ),
-        mainPanel(tableOutput("table"), # table output
-                  textOutput("text")) # text output, for sources of toxicity information
+    tabItems(
+      tabItem(tabName = "toxicity",
+              h2("Restricted Chemicals and Toxicity Level"),
+              fluidPage(
+                sidebarLayout(
+                  sidebarPanel(
+                    htmlOutput("type"), # reactive input
+                    htmlOutput("active") # reactive input
+                  ),
+                  mainPanel(tableOutput("table1"), # table output
+                            htmlOutput("text1")) # text output, for sources of toxicity information
+                )
+              )
       ),
       
-      tags$style(type="text/css",
-                 ".shiny-output-error { visibility: hidden; }",
-                 ".shiny-output-error:before { visibility: hidden; }") # inserted to suppress warning messages
+      tabItem(tabName = "other",
+              h2("Other Helpful Graphs and Tables"),
+              fluidPage(
+                sidebarLayout(
+                  sidebarPanel(
+                    selectInput("year", "Year:", unique(veg.tidy$Year)), # reactive input
+                    selectInput("variable", "Variable:", c("Commodity", "Domain", "Type")) # reactive input
+                  ),
+                  mainPanel(htmlOutput("text2"), # text output, for explanations of graphs
+                            plotOutput("graphs") # graph output ) 
+                  ) 
+                )
+              ))
+      
+    ),
+    tags$style(type="text/css",
+               ".shiny-output-error { visibility: hidden; }",
+               ".shiny-output-error:before { visibility: hidden; }" # inserted to suppress messages
     )
   )
 )
+  
+
 
 # define server for reactive inputs and rendering table, text
 server <- function(input, output){
   output$type <- renderUI({
-    selectInput("type","Type:",veg.chem$Type)
+    selectInput("type","Type:",veg.chem.48$Type)
   }) # reactive input for type
   
   output$active <- renderUI({
-    data_available <- dplyr::filter(veg.chem, Type == input$type)$`Active Ingredient`
+    data_available <- dplyr::filter(veg.chem.48, Type == input$type)$`Active Ingredient`
     selectInput("ac","Active Ingredient:",data_available)
   }) # reactive input for active ingredient
   
-  output$table <- renderTable({
-    dplyr::filter(veg.chem,Type == input$type, `Active Ingredient` == input$ac)
+  output$table1 <- renderTable({
+    dplyr::filter(veg.chem.48,Type == input$type, `Active Ingredient` == input$ac)
   }) # table output
   
-  output$text <- renderPrint({
-    cat("Information taken from","https://www.fao.org,","https://pubchem.ncbi.nlm.nih.gov,", "https://pmep.cce.cornell.edu,", "https://www.bartlett.com,", "https://sitem.herts.ac.uk,",
-        sep = "\n")  # text ouput
-  }) 
+  output$text1 <- renderText({
+    paste('<B>Information taken from:</B>',"<p>https://www.fao.org</p>","<p>https://pubchem.ncbi.nlm.nih.gov</p>", "<p>https://pmep.cce.cornell.edu</p>", "<p>https://www.bartlett.com</p>", "<p>https://sitem.herts.ac.uk</p>")  # text ouput
+  })
+  
+  output$text2 <- renderText({
+    paste('<b>Instructions:</b>', "Select year and the name of one variable to see a histogram of the variable for that year.")
+  })
+  
+  output$graphs <- renderPlot({
+    newdata <- filter(veg.tidy, Year == input$year)
+    ggplot(newdata) + geom_bar(aes(x=input$variable))
+  })
 }
 
 # run the app
