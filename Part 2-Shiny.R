@@ -61,7 +61,6 @@ ui <- dashboardPage(skin="green",
 )
   
 
-
 # define server for reactive inputs and rendering table, text
 server <- function(input, output){
   output$type <- renderUI({
