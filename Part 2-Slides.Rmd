@@ -15,17 +15,15 @@ In modern argriculture, many chemicals in the form of herbicides, pesticides, an
 
 ## Initial Data Set {.smaller}
 - data downloaded from USDA National Agriculturural Statistics Service's [Quick Stats](https://quickstats.nass.usda.gov/) page
-- initial data set is not tidy
+- initial data set is not tidy (here showing first 2 rows of the data set)
 ```{r}
-head(veg[,1:6])
-head(veg[,7:11])
+veg %>% print(n = 2, width = Inf)
 ```
 
 ## Untidy Data: irrelevant columns {.smaller}
 - columns that have either one value and/or NA throughout the whole column can be eliminated in our analysis
 ```{r}
-head(veg[,names(a[a==1])][,1:6])
-head(veg[,names(a[a==1])][,7:12])
+veg[,names(a[a==1])] %>% print(n = 8, width = Inf)
 ```
 
 ## Untidy Data: Resourses {.smaller}
@@ -42,26 +40,30 @@ veg.tidy[120,5:10]
 - columns are split to have one observation per cell
 - data set is now tidy
 ```{r}
-head(veg.tidy[,1:6])
-head(veg.tidy[,7:9])
+veg.tidy[,1:9] %>% print(n = 7, width = Inf)
 ```
 
 ## Restricted Use Chemicals {.smaller}
 - tidy data set is filtered to see the "Restricted Use Chemicals" used
 ```{r}
-head(veg.chem.48[,1:3])
-head(veg.chem.48[,4:5])
+veg.chem.48[,1:5] %>% print(n = 8, width = Inf)
 ```
 
-## Toxicity Level for Restricted Use Chemicals {.smaller}
+## Toxicity Level for Restricted Use Chemicals
 ```{r}
 veg.chem.48 <- veg.chem.48 %>% dplyr::rename(`Toxicity Measurement`=`Toxicity Measurements (oral, for an experimental rat)`)
 bind_cols(head(veg.chem.48[,4]),head(veg.chem.48[,6]))
 ```
 - the corresponding toxicity level was found for one experimental rat with the chemical taken orally
+
+## Toxicity Level for Restricted Use Chemicals (cont.) 
+
 - a lower LD50 dose corresponds to a moderately-high to high toxicity level and the higher the LD50 dose, the less toxic the chemical
 - unit of measurement "mg/kg" means that X mg of the chemical was taken per one kg of the rat's body weight
 - acute lethal dose, or LD50, means that with each dose, 50% of the subjects will die
 
+    **Note**: 
+*information on toxicity level is taken from www.fao.org, pubchem.ncbi.nlm.nih.gov, pmep.cce.cornell.edu, www.bartlett.com, sitem.herts.ac.uk*
+
 ## Conclusion {.smaller}
-We examined broccoli, cauliflower, brussel sprouts, vegetable totals, and vegetable other and found that restricted use chemicals were only used on broccoli and cauliflower. In addition, some of these chemicals have very low LD50 levels, which are quite harmful. There are a shocking number of chemicals outside of restricted use chemicals that are sprayed on crops that can be very harmful to bees or other insects necessary for pollination and the health of crops. These insects can be easily killed by any dose of these chemicals due to their small body weight. Therefore, we should be mindful of the chemicals we use in nature.
+We examined broccoli, cauliflower, brussel sprouts, vegetable totals, and other vegetables and found that restricted use chemicals were only used on broccoli and cauliflower. In particular, there are 28 distinct restricted used chemicals used on broccoli and 2 on cauliflower. In addition, some of these chemicals have very low LD50 levels, which are quite harmful. There are a shocking number of chemicals outside of restricted use chemicals that are sprayed on crops that can be very harmful to bees or other insects necessary for pollination and the health of crops. These insects can be easily killed by any dose of these chemicals due to their small body weight. Therefore, we should be mindful of the chemicals we use in nature.
