@@ -92,7 +92,7 @@ server <- function(input, output){
     if (input$variable=="Commodity") {
       ggplot(newdata, aes(Commodity)) + geom_bar(stat="count")
     }
-    if (input$variable=="Domain") {
+    else if (input$variable=="Domain") {
       ggplot(newdata, aes(Domain)) + geom_bar(stat="count")
     }
     else {
